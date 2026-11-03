@@ -11,7 +11,7 @@ let
   };
 in
 {
-  home.packages = with pkgs; [
+  distroPackages.candidates = with pkgs; [
     # AVR toolchain
     pkgsCross.avr.buildPackages.gcc
     pkgsCross.avr.buildPackages.binutils

@@ -2,6 +2,7 @@
 { config, ... }:
 {
   imports = [
+    ./distro-packages.nix
     ./git.nix
     ./ssh.nix
     ./nixvim.nix

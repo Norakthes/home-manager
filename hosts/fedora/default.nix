@@ -21,6 +21,42 @@
     ZYBOVIO_LABS = "/mnt/storage/fpga";
   };
 
+  # Already installed with dnf (checked against /usr/bin). Their nix copies
+  # would never run since native-first.nix puts /usr/bin first. If one gets
+  # removed from Fedora, delete it here and nix takes over.
+  distroPackages.provided = [
+    "bat"
+    "btop"
+    "cryptsetup"
+    "docker"
+    "docker-compose"
+    "file"
+    "file-roller"
+    "gnome-calculator"
+    "htop"
+    "jq"
+    "libreoffice"
+    "libressl"  # netcat
+    "lsof"
+    "ltrace"
+    "minicom"
+    "nmap"
+    "nodejs"
+    "qbittorrent"
+    "ripgrep"
+    "screen"
+    "ShellCheck"
+    "strace"
+    "tinyxxd"
+    "util-linux-minimal"  # hexdump
+    "wine-wow64"
+  ];
+
+  # Config from nix, binary from dnf
+  programs.git.package = null;
+  programs.mpv.package = null;
+  programs.vscode.package = null;
+
   programs.git.signing = {
     format = "openpgp";
     key = "649B245913D8A39C";

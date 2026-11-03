@@ -1,7 +1,7 @@
 # Development tools and environment
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [
+  distroPackages.candidates = with pkgs; [
     file
     hexdump
     xxd
