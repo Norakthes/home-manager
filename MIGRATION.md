@@ -82,6 +82,9 @@ dangle.
    dwm session, status bar, picom, gpg/ssh agent.
 4. `sudo nixos-rebuild switch --flake ~/nixos-config`
 5. Accept the device in the NAS Syncthing GUI and share `documents`.
+6. Commit signing: set the yubikey's GPG key in `hosts/laptop`
+   (`programs.git.signing = { format = "openpgp"; key = "<id>"; };`,
+   id from `gpg --card-status`). Until then it signs with `~/.ssh/id_ed25519`.
 
 ## Rolling back
 
