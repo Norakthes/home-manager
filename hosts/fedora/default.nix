@@ -56,6 +56,8 @@
   programs.git.package = null;
   programs.mpv.package = null;
   programs.vscode.package = null;
+  # Also avoids a second zsh with its own completion cache next to the login shell
+  programs.zsh.package = null;
 
   programs.git.signing = {
     format = "openpgp";
@@ -78,32 +80,20 @@
       vio-lab = "zybovio lab";  # old name: vio-lab <name> == zybovio lab <name>
     };
 
-    initContent = lib.mkMerge [
-      ''
-        # Xilinx tools run in a subshell, so settings64.sh (PATH/LD_LIBRARY_PATH changes) never
-        # leaks into the rest of the shell. The Vivado GUI runs in its own XWayland window via
-        # x11-run, because Vivado 2018's Java crashes on plain Wayland; batch mode runs directly.
-        vivado() {
-            if [[ " $* " == *" batch "* || " $* " == *" tcl "* ]]; then
-                ( source $XILINX_ROOT/Vivado/2018.2/settings64.sh >/dev/null && command vivado "$@" )
-            else
-                ( source $XILINX_ROOT/Vivado/2018.2/settings64.sh >/dev/null && x11-run vivado "$@" )
-            fi
-        }
-        xsdk()   { ( source $XILINX_ROOT/SDK/2018.2/settings64.sh >/dev/null && SWT_GTK3=0 command xsdk "$@" ) }
-        xsdb()   { ( source $XILINX_ROOT/SDK/2018.2/settings64.sh >/dev/null && command xsdb "$@" ) }
-      ''
-      # SDKMAN wants to be last. Aliases are off while sourcing it since it
-      # calls find/grep, which are aliased to fd/rg above.
-      (lib.mkOrder 1500 ''
-        export SDKMAN_DIR="$HOME/.sdkman"
-        if [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]]; then
-          setopt no_aliases
-          source "$SDKMAN_DIR/bin/sdkman-init.sh"
-          setopt aliases
-        fi
-      '')
-    ];
+    # Xilinx tools run in a subshell, so settings64.sh (PATH/LD_LIBRARY_PATH changes) never
+    # leaks into the rest of the shell. The Vivado GUI runs in its own XWayland window via
+    # x11-run, because Vivado 2018's Java crashes on plain Wayland; batch mode runs directly.
+    initContent = ''
+      vivado() {
+          if [[ " $* " == *" batch "* || " $* " == *" tcl "* ]]; then
+              ( source $XILINX_ROOT/Vivado/2018.2/settings64.sh >/dev/null && command vivado "$@" )
+          else
+              ( source $XILINX_ROOT/Vivado/2018.2/settings64.sh >/dev/null && x11-run vivado "$@" )
+          fi
+      }
+      xsdk()   { ( source $XILINX_ROOT/SDK/2018.2/settings64.sh >/dev/null && SWT_GTK3=0 command xsdk "$@" ) }
+      xsdb()   { ( source $XILINX_ROOT/SDK/2018.2/settings64.sh >/dev/null && command xsdb "$@" ) }
+    '';
   };
 
   # Kanata keyboard remapper. On NixOS this is a system service; here it runs

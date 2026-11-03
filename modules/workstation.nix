@@ -8,5 +8,6 @@
     ./mpv.nix
     ./apps.nix
     ./embedded.nix
+    ./java.nix
   ];
 }

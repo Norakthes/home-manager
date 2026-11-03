@@ -8,6 +8,7 @@
     ./nixvim.nix
     ./nvim-debug.nix
     ./zsh.nix
+    ./zsh-startup-log.nix
   ];
 
   home.username = "rasmus";
