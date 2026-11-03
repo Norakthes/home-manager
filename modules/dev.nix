@@ -2,18 +2,6 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    gnumake
-    cmake
-    meson
-    ninja
-
-    gcc
-    clang
-    clang-tools
-    llvm
-    llvmPackages.openmp
-
-    binutils
     file
     hexdump
     xxd

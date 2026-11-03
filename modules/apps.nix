@@ -6,7 +6,6 @@
       shellcheck
       zed-editor
       gnome-calculator
-      maple
       file-roller
       geogebra
       rbw

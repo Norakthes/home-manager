@@ -2,12 +2,11 @@
 { pkgs, lib, ... }:
 {
   imports = [
+    ../../modules/native-first.nix
+    ../../modules/workstation.nix
     ../../modules/documents.nix
     ../../modules/documents-backup.nix
   ];
-
-  # Non-NixOS host: sets XDG_DATA_DIRS, locale archive etc. for nix packages
-  targets.genericLinux.enable = true;
 
   home.sessionPath = [
     "$HOME/bin"
@@ -20,6 +19,13 @@
     # Xilinx 2018.2 + zybovio
     XILINX_ROOT = "/mnt/storage/Xilinx";
     ZYBOVIO_LABS = "/mnt/storage/fpga";
+  };
+
+  # Fedora's own platformio and zig installs
+  programs.vscode.profiles.default.userSettings = {
+    "platformio-ide.customPATH" = "/usr/bin";
+    "platformio-ide.useBuiltinPIOCore" = false;
+    "zig.path" = "/home/rasmus/.local/bin/zig";
   };
 
   programs.zsh = {

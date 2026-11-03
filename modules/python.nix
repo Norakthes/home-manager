@@ -1,31 +1,6 @@
 { config, pkgs, ...}:
 {
-  home.packages = with pkgs; [
-    uv
-
-    (python3.withPackages (ps: with ps; [
-      pip
-      setuptools
-      wheel
-      virtualenv
-
-      jupyter
-      jupyterlab
-      notebook
-      ipykernel
-
-      requests
-      pyyaml
-      click
-      rich
-
-      numpy
-      pandas
-      matplotlib
-      scipy
-      statsmodels
-    ]))
-  ];
+  home.packages = [ pkgs.uv ];
 
   programs.zsh.shellAliases = {
     "uv-init" = "uv init";
@@ -41,9 +16,4 @@
     UV_CACHE_DIR = "${config.home.homeDirectory}/.cache/uv";
     UV_PYTHON_PREFERENCE = "only-system";
   };
-
-  home.file.".uvrc".text = ''
-    python-preference = "only-system"
-    cache-dir = "${config.home.homeDirectory}/.cache/uv"
-  '';
 }

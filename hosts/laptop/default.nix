@@ -1,19 +1,18 @@
 # ASUS Zephyrus laptop (NixOS)
-{ ... }:
+{ pkgs, ... }:
 {
   imports = [
+    ../../modules/workstation.nix
+    ../../modules/toolchain.nix
     ../../modules/nixos-aliases.nix
     ../../modules/dwm.nix
-    ../../modules/apps.nix
-    ../../modules/dev.nix
-    ../../modules/python.nix
-    ../../modules/vscode.nix
-    ../../modules/mpv.nix
-    ../../modules/embedded.nix
     ../../modules/gaming.nix
     ../../modules/yubikey.nix
     ../../modules/documents.nix
   ];
+
+  # Needs the installer added to the store by hand, see packages/maple
+  home.packages = [ pkgs.maple ];
 
   programs.zsh.shellAliases = {
     btrfs-usage = "sudo btrfs filesystem usage /";
