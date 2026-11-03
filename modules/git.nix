@@ -1,7 +1,15 @@
-{ config, pkgs, ... }:
+{ lib, ... }:
 {
   programs.git = {
     enable = true;
+
+    # Hosts with a GPG key (yubikey, fedora) override this. Elsewhere sign
+    # with the ssh key; GitHub needs it added a second time as a signing key.
+    signing = {
+      signByDefault = true;
+      format = lib.mkDefault "ssh";
+      key = lib.mkDefault "~/.ssh/id_ed25519.pub";
+    };
 
     settings = {
       user = {

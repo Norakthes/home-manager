@@ -21,6 +21,12 @@
     ZYBOVIO_LABS = "/mnt/storage/fpga";
   };
 
+  programs.git.signing = {
+    format = "openpgp";
+    key = "649B245913D8A39C";
+    signer = "/usr/bin/gpg";  # the key lives in Fedora's gpg/keyboxd
+  };
+
   # Fedora's own platformio and zig installs
   programs.vscode.profiles.default.userSettings = {
     "platformio-ide.customPATH" = "/usr/bin";
