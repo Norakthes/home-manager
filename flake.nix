@@ -23,7 +23,11 @@
     pkgs = import nixpkgs {
       inherit system;
       overlays = [ (import ./packages) ];
-      config.allowUnfree = true;
+      config = {
+        allowUnfree = true;
+        # Marked broken ahead of its removal, but lutris' FHS env still has it
+        problems.handlers."gtk+".broken = "warn";
+      };
     };
 
     # One home per host: modules/core.nix plus hosts/<host>, which imports
