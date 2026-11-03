@@ -31,6 +31,9 @@ New machine: add `hosts/<hostname>/default.nix` and a line in `flake.nix`.
 `modules/documents-backup.nix` backs it up daily with borgmatic to the Hetzner
 Storage Box; only one machine imports it (currently fedora).
 
+See MIGRATION.md for what changed in the split from nixos-config and how to
+roll back.
+
 ```sh
 systemctl --user status syncthing borgmatic.timer
 borgmatic list                      # archives
