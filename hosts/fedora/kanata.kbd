@@ -1,0 +1,12 @@
+(defcfg
+  process-unmapped-keys yes
+  danger-enable-cmd yes
+)
+
+(defsrc
+  caps esc lctl lmet ins
+)
+
+(deflayer base
+  esc caps lctl lmet prtsc
+)
