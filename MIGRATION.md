@@ -66,8 +66,8 @@ What changed when the single NixOS repo was split into this repo
 - laptop and NixOS desktop never built or booted with the new configs
   (dwm session units now come from home-manager, gpg-agent moved).
 - the laptop home can't be built without the maple installer in its store.
-- fedora: `workstation.nix`/`native-first.nix` not activated yet; KDE
-  session PATH only changes after logging out and in.
+- fedora: the KDE session PATH order (`native-first.nix`) only applies after
+  logging out and in; shells were checked.
 
 ## Switching a NixOS machine over
 
@@ -77,14 +77,21 @@ nixos-rebuild. Without a standalone home-manager by then, ~/.zshrc and friends
 dangle.
 
 1. Move `~/Documents` aside (Syncthing would merge stale files back).
-2. `nix run home-manager -- switch --flake ~/home-manager -b hm-bak`
-3. `sudo nixos-rebuild test --flake ~/nixos-config`, log out and in, check
+2. Pick the commit signing key first: home-manager turns signing on, and
+   git refuses to commit if the key is missing.
+   - yubikey (laptop): `curl https://github.com/Norakthes.gpg | gpg --import`,
+     then take the "Signature key" from `gpg --card-status` and set
+     `programs.git.signing = { format = "openpgp"; key = "<that id>"; };` in
+     `hosts/<host>`. Its public key must be on GitHub.
+   - otherwise the default, `~/.ssh/id_ed25519`: create it with
+     `ssh-keygen -t ed25519` if missing and add the `.pub` on GitHub as a
+     *signing* key (separate from the authentication key).
+3. `nix run home-manager -- switch --flake ~/home-manager -b hm-bak`, then
+   check `git commit --allow-empty -m test` in a scratch repo signs.
+4. `sudo nixos-rebuild test --flake ~/nixos-config`, log out and in, check
    dwm session, status bar, picom, gpg/ssh agent.
-4. `sudo nixos-rebuild switch --flake ~/nixos-config`
-5. Accept the device in the NAS Syncthing GUI and share `documents`.
-6. Commit signing: set the yubikey's GPG key in `hosts/laptop`
-   (`programs.git.signing = { format = "openpgp"; key = "<id>"; };`,
-   id from `gpg --card-status`). Until then it signs with `~/.ssh/id_ed25519`.
+5. `sudo nixos-rebuild switch --flake ~/nixos-config`
+6. Accept the device in the NAS Syncthing GUI and share `documents`.
 
 ## Rolling back
 
@@ -92,8 +99,8 @@ dangle.
   `<generation path>/activate` of an older one. Replaced files are kept as
   `*.hm-bak`.
 - **NixOS**: pick the previous generation in the boot menu, or
-  `sudo nixos-rebuild switch --rollback`. The old config is on `main` of
-  nixos-config; the new one is on `standalone-home-manager`.
+  `sudo nixos-rebuild switch --rollback`. In nixos-config, `17e2b49` is the
+  last commit of the old config.
 - **docsync**: the old script was never committed. A copy lives at
   `/nix/store/h23z2dhcq173fia5zq8sqjw6qs0lp181-docsync/bin/docsync` until nix-gc
   removes it; copy it out if you might want it back.
@@ -108,3 +115,4 @@ dangle.
 - kanata: user in `input` + `uinput` groups, udev rule for `/dev/uinput`
 - linger for rasmus (Syncthing/borgmatic run while logged out)
 - secrets: `~/.ssh/id_ed25519`, `~/.ssh/hetzner_docsync`, `~/.config/borg/passphrase`
+- GPG signing key `649B245913D8A39C` in Fedora's keyring (`hosts/fedora`)
