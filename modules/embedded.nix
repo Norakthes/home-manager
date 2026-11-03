@@ -1,6 +1,7 @@
 # Cross toolchains for AVR and RISC-V. Serial port access (dialout group) and
-# programmer udev rules are system config.
-{ pkgs, ... }:
+# programmer udev rules are system config. The cross gdbs ship the same python
+# files as each other and the native gdb, so they get distinct low priorities.
+{ pkgs, lib, ... }:
 let
   riscv32Pkgs = import pkgs.path {
     system = pkgs.stdenv.system;
@@ -14,7 +15,7 @@ in
     # AVR toolchain
     pkgsCross.avr.buildPackages.gcc
     pkgsCross.avr.buildPackages.binutils
-    pkgsCross.avr.buildPackages.gdb
+    (lib.lowPrio pkgsCross.avr.buildPackages.gdb)
     avrdude
     compiledb
 
@@ -27,7 +28,7 @@ in
     # RISC-V toolchain
     riscv32Pkgs.buildPackages.gcc
     riscv32Pkgs.buildPackages.binutils
-    riscv32Pkgs.buildPackages.gdb
+    (lib.setPrio 20 riscv32Pkgs.buildPackages.gdb)
     qemu  # Includes RISC-V system and user mode emulation
   ];
 }
