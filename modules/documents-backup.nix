@@ -3,6 +3,8 @@
 # Passphrase: ~/.config/borg/passphrase, ssh key: see ssh.nix.
 { config, ... }:
 {
+  imports = [ ./notify-failure.nix ];
+
   programs.borgmatic = {
     enable = true;
 
@@ -44,4 +46,5 @@
     enable = true;
     frequency = "daily";
   };
+  systemd.user.services.borgmatic.Unit.OnFailure = [ "notify-failure@%n.service" ];
 }

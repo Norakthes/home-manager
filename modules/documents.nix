@@ -13,16 +13,17 @@ let
 
   nas = {
     id = nasId;
-    addresses = [
-      "tcp://${nasLan}:${toString nasPort}"
-      "quic://${nasLan}:${toString nasPort}"
-    ] ++ lib.optionals (nasTailnet != null) [
-      "tcp://${nasTailnet}:${toString nasPort}"
-      "quic://${nasTailnet}:${toString nasPort}"
-    ];
+    addresses = lib.concatMap (ip: [
+      "tcp://${ip}:${toString nasPort}"
+      "quic://${ip}:${toString nasPort}"
+    ]) [ nasLan nasTailnet ];
   };
 in
 {
+  imports = [ ./notify-failure.nix ];
+
+  systemd.user.services.syncthing.Unit.OnFailure = [ "notify-failure@%n.service" ];
+
   services.syncthing = {
     enable = true;
 
