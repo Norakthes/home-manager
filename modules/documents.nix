@@ -9,7 +9,7 @@ let
   nasId = "6CAAR5Y-6ICRTFU-GXF736R-ZQYWHSU-MDIIZU7-TJPJFAU-AXVFHUM-YMEGTAE";
   nasLan = "10.0.0.20";
   nasPort = 20978;  # sync port of the TrueNAS Syncthing app
-  nasTailnet = null;  # NAS 100.x address, set once it is on the tailnet
+  nasTailnet = "100.102.172.29";
 
   nas = {
     id = nasId;
