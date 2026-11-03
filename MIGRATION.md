@@ -37,7 +37,10 @@ What changed when the single NixOS repo was split into this repo
 - **gpg-agent** (laptop) runs as a home-manager user service instead of the
   NixOS `programs.gnupg.agent`.
 - **kanata** keyboard renamed to `main` on NixOS (unit `kanata-main`).
-- **TLP** governor setting actually applies now (it was misspelled).
+- **TLP**: the governor settings were misspelled and never applied; they are
+  removed, so behaviour is unchanged.
+- **command-not-found** is off (broken on flake systems, no database).
+- **dwm** now builds against the system nixpkgs instead of its own July 2025 pin.
 
 ## Bugs fixed on the way
 
@@ -65,6 +68,20 @@ What changed when the single NixOS repo was split into this repo
 - the laptop home can't be built without the maple installer in its store.
 - fedora: `workstation.nix`/`native-first.nix` not activated yet; KDE
   session PATH only changes after logging out and in.
+
+## Switching a NixOS machine over
+
+Order matters. The old system generation still owns the user environment
+(it used home-manager as a NixOS module), and nix.gc deletes it 4 days after
+nixos-rebuild. Without a standalone home-manager by then, ~/.zshrc and friends
+dangle.
+
+1. Move `~/Documents` aside (Syncthing would merge stale files back).
+2. `nix run home-manager -- switch --flake ~/home-manager -b hm-bak`
+3. `sudo nixos-rebuild test --flake ~/nixos-config`, log out and in, check
+   dwm session, status bar, picom, gpg/ssh agent.
+4. `sudo nixos-rebuild switch --flake ~/nixos-config`
+5. Accept the device in the NAS Syncthing GUI and share `documents`.
 
 ## Rolling back
 
