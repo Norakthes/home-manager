@@ -27,13 +27,23 @@
         IdentityFile = "~/.ssh/hetzner_docsync";
       };
 
+      # NAS over Tailscale, so these work the same from anywhere
       "nas" = {
-        HostName = "10.0.0.20";
+        HostName = "100.102.172.29";
         User = "truenas_admin";
       };
 
+      # BorgWarehouse app on the NAS, holds the borg backups
+      "nas-borg" = {
+        HostName = "100.102.172.29";
+        User = "borgwarehouse";
+        Port = 30407;
+        IdentityFile = "~/.ssh/nas_borg";
+        IdentitiesOnly = true;
+      };
+
       # Defaults for everything else, must come last
-      "*" = lib.hm.dag.entryAfter [ "github.com" "hpc" "hetzner-storagebox" "nas" ] {
+      "*" = lib.hm.dag.entryAfter [ "github.com" "hpc" "hetzner-storagebox" "nas" "nas-borg" ] {
         Compression = true;
         ServerAliveInterval = 60;
         ServerAliveCountMax = 10;
