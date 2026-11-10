@@ -20,7 +20,7 @@ let
   };
 in
 {
-  imports = [ ./notify-failure.nix ];
+  imports = [ ./notify-failure.nix ./killswitch.nix ];
 
   systemd.user.services.syncthing.Unit.OnFailure = [ "notify-failure@%n.service" ];
 
