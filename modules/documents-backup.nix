@@ -1,5 +1,6 @@
-# Daily borg backup of ~/Documents to the Hetzner Storage Box. Syncthing keeps
-# Documents identical everywhere, so one machine importing this is enough.
+# Daily borg backup of ~/Documents to the NAS and the Hetzner Storage Box.
+# Syncthing keeps Documents identical everywhere, so one machine importing
+# this is enough.
 # Passphrase: ~/.config/borg/passphrase, ssh key: see ssh.nix.
 { config, ... }:
 {
@@ -13,6 +14,7 @@
       source_directories = [ "${config.home.homeDirectory}/Documents" ];
       repositories = [
         { path = "ssh://hetzner-storagebox/./documents-borg"; label = "hetzner"; }
+        { path = "ssh://nas-borg/./7d52b5dd"; label = "nas"; }
       ];
       exclude_patterns = [
         "*/.stversions"

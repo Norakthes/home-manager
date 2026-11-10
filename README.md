@@ -28,8 +28,8 @@ New machine: add `hosts/<hostname>/default.nix` and a line in `flake.nix`.
 ## Documents
 
 `modules/documents.nix` syncs `~/Documents` with Syncthing via the NAS.
-`modules/documents-backup.nix` backs it up daily with borgmatic to the Hetzner
-Storage Box; only one machine imports it (currently fedora).
+`modules/documents-backup.nix` backs it up daily with borgmatic to the NAS and
+the Hetzner Storage Box; only one machine imports it (currently fedora).
 `killswitch on|off|status` temporarily stops both, and Tailscale
 (`modules/killswitch.nix`).
 
