@@ -16,7 +16,9 @@
         "virtualenv"
         "node"
         "npm"
-        "yarn"
+        # no "yarn": yarn isn't installed, and the plugin runs `yarn global bin`
+        # at load. The missing command goes to Fedora's command_not_found_handler,
+        # which starts PackageKit over D-Bus and can block startup for 2-25 s.
         "systemd"
         "sudo"
         "history"
